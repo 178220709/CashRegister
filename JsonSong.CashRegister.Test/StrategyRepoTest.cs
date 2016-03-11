@@ -16,7 +16,7 @@ namespace JsonSong.CashRegister.Test
 
             Assert.IsTrue(list.Count > 0);
             //no level conflict
-            Assert.AreNotEqual(list.GroupBy(a => a.Level).Count(g => g.Count() > 1),0);
+            Assert.AreEqual(list.GroupBy(a => a.Level).Count(g => g.Count() > 1),0);
         }
 
         [TestMethod]

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
-using JsonSong.CashRegister.Domain.Core;
+using JsonSong.CashRegister.Domain.Dto;
+using JsonSong.CashRegister.Domain.Exception;
 using JsonSong.CashRegister.Domain.Models;
 using Newtonsoft.Json;
 
@@ -11,20 +13,28 @@ namespace JsonSong.CashRegister.Domain
 {
     public class Cashier
     {
-        private IEnumerable<Product>  ProductRepo { get; set; }
+        private IEnumerable<Product> ProductRepo { get; set; }
         private IEnumerable<Strategy> StrategyRepo { get; set; }
+        public string ShopName { get; set; }
 
-        public Cashier(IEnumerable<Product> productRepo, IEnumerable<Strategy> strategyRepo)
+        public Cashier(IEnumerable<Product> productRepo, IEnumerable<Strategy> strategyRepo, string shopName)
         {
             ProductRepo = productRepo;
             StrategyRepo = strategyRepo;
+            ShopName = shopName;
         }
 
-        public double GetTotal(string codeJsonStr)
+        public string GetResultFromCode(string codeJsonStr)
+        {
+            var priceResults = GetPriceResultFromCode(codeJsonStr);
+            return GetResultContent(priceResults);
+        }
+
+        private IEnumerable<PriceResult> GetPriceResultFromCode(string codeJsonStr)
         {
             var codeList = JsonConvert.DeserializeObject<IList<string>>(codeJsonStr);
             var cart = GetCart(codeList);
-
+            return GetPriceResult(cart);
         }
 
         /// <summary>
@@ -32,9 +42,9 @@ namespace JsonSong.CashRegister.Domain
         /// </summary>
         /// <param name="codeList"></param>
         /// <returns></returns>
-        private static Dictionary<string, int> GetCart(IList<string> codeList)
+        private static Dictionary<string, double> GetCart(IList<string> codeList)
         {
-            var dic = new Dictionary<string, int>();
+            var dic = new Dictionary<string, double>();
             if (codeList == null || !codeList.Any())
             {
                 return dic;
@@ -44,8 +54,8 @@ namespace JsonSong.CashRegister.Domain
                 if (code.Contains("-"))
                 {
                     var _info = code.Split('-');
-                    int _num;
-                    if (!int.TryParse(_info[1],out _num))
+                    double _num;
+                    if (!double.TryParse(_info[1], out _num))
                     {
                         throw new BarcodeException();
                     }
@@ -60,22 +70,51 @@ namespace JsonSong.CashRegister.Domain
             return dic;
         }
 
-        private  double CountCart(Dictionary<string, int> cart)
+        private IEnumerable<PriceResult> GetPriceResult(Dictionary<string, double> cart)
         {
             var productCodes = ProductRepo.Select(a => a.BarCode).ToList();
             if (!cart.Keys.All(key => productCodes.Contains(key)))
             {
                 throw new UnknownProductException();
             }
-            cart.ToList().ForEach(a=>);
+            var results = cart.ToList().Select(kv =>
+            {
+                var dto = new PriceResult()
+                {
+                    Product = ProductRepo.First(a => a.BarCode == kv.Key),
+                    Num = kv.Value,
+                };
+                dto.Strategy = StrategyRepo.Where(a => a.ProductCodeList.Contains(kv.Key))
+                    .OrderByDescending(a => a.Level).First();
+                dto.Total = dto.Strategy.StrategyRule(dto.Product, kv.Value);
+                dto.Save = dto.Product.Price*dto.Num - dto.Total;
+                return dto;
+            });
+            return results;
+        }
 
-
+        private string GetResultContent(IEnumerable<PriceResult> priceResults)
+        {
+            StringBuilder sb = new StringBuilder();
+            const string strategySplitLine = "----------------------";
+            sb.AppendLine(string.Format("***<{0}>购物清单***", ShopName));
+            priceResults.GroupBy(r=>r.Strategy).ToList().ForEach(g =>
+            {
+                g.ToList().ForEach(dto =>
+                {
+                    sb.AppendLine(dto.Strategy.RenderOutput(dto));
+                });
+                sb.AppendLine(strategySplitLine);
+            });
+            sb.Remove(sb.Length - strategySplitLine.Length-2, strategySplitLine.Length);
+            sb.AppendLine("**********************");
+            return sb.ToString();
         }
     }
 
     internal static class CashierHelper
     {
-        internal static void AddOrUpdateCount(this Dictionary<string, int> dic,string key,int count=1)
+        internal static void AddOrUpdateCount(this Dictionary<string, double> dic, string key, double count = 1)
         {
             if (dic.ContainsKey(key))
             {
@@ -87,7 +126,4 @@ namespace JsonSong.CashRegister.Domain
             }
         }
     }
-
-
-
 }

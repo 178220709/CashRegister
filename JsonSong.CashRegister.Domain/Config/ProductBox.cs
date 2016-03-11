@@ -25,11 +25,11 @@ namespace JsonSong.CashRegister.Domain.Config
             BarCode = "000001"
         };
 
-        public static Product When2Cut1 = new Product()
+        public static Product Badminton = new Product()
         {
             Name = "羽毛球",
             UnitName = "个",
-            Price = 2.00,
+            Price = 5.00,
             BarCode = "000002"
         };
 
@@ -39,6 +39,13 @@ namespace JsonSong.CashRegister.Domain.Config
             UnitName = "斤",
             Price = 5.50,
             BarCode = "000003"
+        };
+        public static Product Basketball = new Product()
+        {
+            Name = "篮球",
+            UnitName = "个",
+            Price = 155.50,
+            BarCode = "000004"
         };
     }
 }

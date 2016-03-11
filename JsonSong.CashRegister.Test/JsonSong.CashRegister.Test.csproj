@@ -50,11 +50,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CashierTest.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="StrategyRepoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CashRegister.UI\JsonSong.CashRegister.UI.csproj">
+      <Project>{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC}</Project>
+      <Name>JsonSong.CashRegister.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JsonSong.CashRegister.Domain\JsonSong.CashRegister.Domain.csproj">
       <Project>{BC4A0542-B89A-4ED3-8097-DA0E8285AD68}</Project>
       <Name>JsonSong.CashRegister.Domain</Name>

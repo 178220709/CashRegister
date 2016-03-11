@@ -6,6 +6,5 @@
         public string BarCode { get; set; }
         public string UnitName { get; set; }
         public double Price { get; set; }
-       
     }
 }
