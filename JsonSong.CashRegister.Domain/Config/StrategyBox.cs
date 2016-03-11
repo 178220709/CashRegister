@@ -42,8 +42,8 @@ namespace JsonSong.CashRegister.Domain.Config
                     Level = 1,
                     StrategyRule = (pro, num) => (pro.Price*num*0.95),
                     RenderOutput = result => string.Format("名称：{0}，数量：{1}{2}，单价：{3}(元)，小计：{4}(元)，节省{5}(元)",
-                        result.Product.Name, result.Num, result.Product.UnitName, result.Product.Price.ToString("0.00"), result.Total.ToString("0.00"),
-                        result.Save.ToString("0.00"))
+                        result.Product.Name, result.Num, result.Product.UnitName, result.Product.Price.ToPriceShow(), result.Total.ToPriceShow(),
+                        result.Save.ToPriceShow())
                 };
             }
         }
@@ -55,7 +55,7 @@ namespace JsonSong.CashRegister.Domain.Config
             {
                 return new Strategy()
                 {
-                    Name = "买2赠1",
+                    Name = "买二赠一",
                     Level = 2,
                     StrategyRule = (pro, num) => (num - (int) num/3)*pro.Price
                 };

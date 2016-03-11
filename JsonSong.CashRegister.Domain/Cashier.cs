@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using JsonSong.CashRegister.Domain.Config;
 using JsonSong.CashRegister.Domain.Dto;
 using JsonSong.CashRegister.Domain.Exception;
 using JsonSong.CashRegister.Domain.Models;
@@ -87,7 +88,7 @@ namespace JsonSong.CashRegister.Domain
                 dto.Strategy = StrategyRepo.Where(a => a.ProductCodeList.Contains(kv.Key))
                     .OrderByDescending(a => a.Level).First();
                 dto.Total = dto.Strategy.StrategyRule(dto.Product, kv.Value);
-                dto.Save = dto.Product.Price*dto.Num - dto.Total;
+                dto.Save = dto.Product.Price * dto.Num - dto.Total;
                 return dto;
             });
             return results;
@@ -98,15 +99,22 @@ namespace JsonSong.CashRegister.Domain
             StringBuilder sb = new StringBuilder();
             const string strategySplitLine = "----------------------";
             sb.AppendLine(string.Format("***<{0}>购物清单***", ShopName));
-            priceResults.GroupBy(r=>r.Strategy).ToList().ForEach(g =>
+
+
+            var results = priceResults as IList<PriceResult> ?? priceResults.ToList();
+            results.ToList().ForEach(dto=>sb.AppendLine(dto.Strategy.RenderOutput(dto)));
+            sb.AppendLine(strategySplitLine);
+            var specialResults = priceResults.Where(a => a.Strategy.Level == StrategyBox.When2Cut1.Level).ToList();
+
+            if (specialResults.Any())
             {
-                g.ToList().ForEach(dto =>
-                {
-                    sb.AppendLine(dto.Strategy.RenderOutput(dto));
-                });
+                sb.AppendLine(StrategyBox.When2Cut1.Name + "商品：");
+                specialResults.ForEach(dto => sb.AppendLine(string.Format("名称：{0}，数量：{1}{2}",
+                    dto.Product.Name,dto.Num,dto.Product.UnitName)));
                 sb.AppendLine(strategySplitLine);
-            });
-            sb.Remove(sb.Length - strategySplitLine.Length-2, strategySplitLine.Length);
+            }
+            sb.AppendLine(string.Format(" 总计：{0}(元)", results.Sum(a=>a.Total).ToPriceShow()));
+            sb.AppendLine(string.Format(" 节省：{0}(元)", results.Sum(a=>a.Save).ToPriceShow()));
             sb.AppendLine("**********************");
             return sb.ToString();
         }
@@ -124,6 +132,14 @@ namespace JsonSong.CashRegister.Domain
             {
                 dic[key] = count;
             }
+        }
+    }
+
+    public static class CashierShowHelper
+    {
+        public static  string ToPriceShow(this  double source)
+        {
+            return source.ToString("0.00");
         }
     }
 }

@@ -10,7 +10,7 @@ namespace JsonSong.CashRegister.Domain.Models
         {
             ProductCodeList = new List<string>();
             RenderOutput = result => string.Format("名称：{0}，数量：{1}{2}，单价：{3}(元)，小计：{4}(元)",
-                result.Product.Name, result.Num, result.Product.UnitName, result.Product.Price.ToString("0.00"), result.Total.ToString("0.00"));
+                result.Product.Name, result.Num, result.Product.UnitName, result.Product.Price.ToPriceShow(), result.Total.ToPriceShow());
         }
 
         public string Name { get; set; }
