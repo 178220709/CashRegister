@@ -102,7 +102,7 @@ namespace JsonSong.CashRegister.Domain
 
 
             var results = priceResults as IList<PriceResult> ?? priceResults.ToList();
-            results.ToList().ForEach(dto=>sb.AppendLine(dto.Strategy.RenderOutput(dto)));
+            results.OrderBy(r=>r.Strategy.Level).ToList().ForEach(dto=>sb.AppendLine(dto.Strategy.RenderOutput(dto)));
             sb.AppendLine(strategySplitLine);
             var specialResults = priceResults.Where(a => a.Strategy.Level == StrategyBox.When2Cut1.Level).ToList();
 
