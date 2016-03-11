@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonSong.CashRegister.UI", "CashRegister.UI\JsonSong.CashRegister.UI.csproj", "{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonSong.CashRegister.Domain", "JsonSong.CashRegister.Domain\JsonSong.CashRegister.Domain.csproj", "{BC4A0542-B89A-4ED3-8097-DA0E8285AD68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.UI", "1.UI", "{2CBF6016-655B-40BA-AB73-FADA8009C7B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Domain", "3.Domain", "{BB6257B3-CF26-4489-957C-2792610A90A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Test", "9.Test", "{4966EDD2-0A1C-4849-8C5D-DD90A00E70FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonSong.CashRegister.Test", "JsonSong.CashRegister.Test\JsonSong.CashRegister.Test.csproj", "{6C9C047C-79C5-416C-B578-7295B5232ECC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC4A0542-B89A-4ED3-8097-DA0E8285AD68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC4A0542-B89A-4ED3-8097-DA0E8285AD68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC4A0542-B89A-4ED3-8097-DA0E8285AD68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC4A0542-B89A-4ED3-8097-DA0E8285AD68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9C047C-79C5-416C-B578-7295B5232ECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9C047C-79C5-416C-B578-7295B5232ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9C047C-79C5-416C-B578-7295B5232ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9C047C-79C5-416C-B578-7295B5232ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AF214BF1-7E5B-4725-8EB2-361DF0BB79AC} = {2CBF6016-655B-40BA-AB73-FADA8009C7B7}
+		{BC4A0542-B89A-4ED3-8097-DA0E8285AD68} = {BB6257B3-CF26-4489-957C-2792610A90A3}
+		{6C9C047C-79C5-416C-B578-7295B5232ECC} = {4966EDD2-0A1C-4849-8C5D-DD90A00E70FA}
+	EndGlobalSection
+EndGlobal
